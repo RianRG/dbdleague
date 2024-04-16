@@ -42,7 +42,6 @@ export async function getSession(app: FastifyInstance){
         })
 
         console.log(output.data, userInfo.data, refresh.data)
-        console.log(userInfo.data)
       }
     }
     
