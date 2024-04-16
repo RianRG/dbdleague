@@ -11,15 +11,15 @@ importers:
       '@fastify/oauth2':
         specifier: 7.8.0
         version: 7.8.0
+      axios:
+        specifier: ^1.6.8
+        version: 1.6.8
       discord.js:
         specifier: ^14.14.1
         version: 14.14.1
       fastify:
         specifier: ^4.26.2
         version: 4.26.2
-      fastify-axios:
-        specifier: ^1.2.8
-        version: 1.2.8
     devDependencies:
       tsx:
         specifier: ^4.7.2
@@ -384,9 +384,6 @@ packages:
 
   fast-uri@2.3.0:
     resolution: {integrity: sha512-eel5UKGn369gGEWOqBShmFJWfq/xSJvsgDzgLYC845GneayWvXBf0lJCBn5qTABfewy1ZDPoaR5OZCP+kssfuw==}
-
-  fastify-axios@1.2.8:
-    resolution: {integrity: sha512-9/y36e5ZdoGz/YEWfKultjma9az5Xt5iwN+ESfNvfDlq7nUvf9F4UU+MCkF9BZhCbcgUl/9yKJNS5dWRvAG2Ag==}
 
   fastify-plugin@4.5.1:
     resolution: {integrity: sha512-stRHYGeuqpEZTL1Ef0Ovr2ltazUT9g844X5z/zEBFLG8RYlpDiOCIG+ATvYEp+/zmc7sN29mcIMp8gvYplYPIQ==}
@@ -950,13 +947,6 @@ snapshots:
   fast-redact@3.5.0: {}
 
   fast-uri@2.3.0: {}
-
-  fastify-axios@1.2.8:
-    dependencies:
-      axios: 1.6.8
-      fastify-plugin: 4.5.1
-    transitivePeerDependencies:
-      - debug
 
   fastify-plugin@4.5.1: {}
 
