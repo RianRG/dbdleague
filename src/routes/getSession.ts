@@ -27,6 +27,21 @@ export async function getSession(app: FastifyInstance){
             'Authorization': `Bearer ${access}`
           }
         })
+
+        const formDataForRefresh = new url.URLSearchParams({
+          client_id: process.env.CLIENT_ID,
+          client_secret: process.env.CLIENT_SECRET,
+          grant_type: 'refresh_token',
+          refresh_token: output.data.refresh_token
+        })
+  
+        const refresh = await axios.post('https://discord.com/api/v10/oauth2/token', formDataForRefresh, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
+
+        console.log(output.data, userInfo.data, refresh.data)
         console.log(userInfo.data)
       }
     }
