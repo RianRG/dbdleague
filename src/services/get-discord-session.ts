@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { FastifyReply } from 'fastify';
 import url from 'url';
 
 export class GetDiscordSession{
-  async get(code: string){
+  async get(code: string, sessionId?: string){
     try{
       const formData = new url.URLSearchParams({
         client_id: process.env.CLIENT_ID,
@@ -18,7 +17,6 @@ export class GetDiscordSession{
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       })
-      
       const access = output.data.access_token
       const userInfo = await axios.get('https://discord.com/api/v10/users/@me', {
         headers: {
