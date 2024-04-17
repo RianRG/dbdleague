@@ -8,6 +8,7 @@ const app = fastify();
 
 app.register(websocket);
 app.register(cookie, {
+  secret: process.env.COOKIE_SECRET,
   hook: 'onRequest'
 })
 
