@@ -1,10 +1,21 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyRequest } from "fastify";
 import url from 'url';
 import axios from 'axios';
+import z from 'zod';
+
+const ReqQueryParser = z.object({
+  query: z.object({
+    code: z.string()
+  })
+})
+
+type ReqQueryType = z.infer<typeof ReqQueryParser>
 
 export async function getSession(app: FastifyInstance){
-  app.get('/session', async (req: any, res) =>{
-    const { code } = req.query;
+  app.get('/session', async (req: ReqQueryType, res) =>{
+
+
+    const code = ReqQueryParser.parse(req.query.code);
     
     if(!code)
       res.redirect('http://localhost:5000/auth/discord')
