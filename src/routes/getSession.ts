@@ -15,7 +15,8 @@ export async function getSession(app: FastifyInstance){
   app.get('/session', async (req: ReqQueryType, res) =>{
 
 
-    const code = ReqQueryParser.parse(req.query.code);
+    const parsedReq = ReqQueryParser.parse(req);
+    const { code } = parsedReq.query
     
     if(!code)
       res.redirect('http://localhost:5000/auth/discord')
@@ -24,7 +25,7 @@ export async function getSession(app: FastifyInstance){
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
       grant_type: 'authorization_code',
-      code: code.toString(),
+      code,
       redirect_uri: 'http://localhost:5000/session'
     })
 
