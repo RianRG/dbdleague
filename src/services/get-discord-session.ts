@@ -2,7 +2,7 @@ import axios from 'axios';
 import url from 'url';
 
 export class GetDiscordSession{
-  async get(code: string, sessionId?: string){
+  async get(code: string){
     try{
       const formData = new url.URLSearchParams({
         client_id: process.env.CLIENT_ID,
@@ -44,6 +44,18 @@ export class GetDiscordSession{
       }
     } catch(err){
       return -1;
+    }
+  }
+
+  async getBySessionId(sessionId: string){
+    const userInfo = await axios.get('https://discord.com/api/v10/users/@me', {
+      headers: {
+        'Authorization': `Bearer ${sessionId}`
+      }
+    })
+
+    return {
+      user: userInfo.data
     }
   }
 }
