@@ -29,6 +29,9 @@ importers:
       typeorm:
         specifier: ^0.3.20
         version: 0.3.20
+      typeorm-fastify-plugin:
+        specifier: ^1.0.5
+        version: 1.0.5
     devDependencies:
       tsx:
         specifier: ^4.7.2
@@ -821,6 +824,9 @@ packages:
     resolution: {integrity: sha512-BCNd4kz6fz12fyrgCTEdZHGJ9fWTGeUzXmQysh0RVocDY3h4frk05ZNCXSy4kIenF7y/QnrdiVpTsyNRn6vlAw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
+
+  typeorm-fastify-plugin@1.0.5:
+    resolution: {integrity: sha512-TM5tGavx7P1n+D3EKlaXkqKT+ETjD+EtE2ydq7CzLu8WlRxHRyklf4KRf/NtQ/eWLCOpA0sTjQ2HXY5mg4cVOw==}
 
   typeorm@0.3.20:
     resolution: {integrity: sha512-sJ0T08dV5eoZroaq9uPKBoNcGslHBR4E4y+EBHs//SiGbblGe7IeduP/IH4ddCcj0qp3PHwDwGnuvqEAnKlq/Q==}
@@ -1725,6 +1731,30 @@ snapshots:
       get-tsconfig: 4.7.3
     optionalDependencies:
       fsevents: 2.3.3
+
+  typeorm-fastify-plugin@1.0.5:
+    dependencies:
+      fastify-plugin: 4.5.1
+      typeorm: 0.3.20
+    transitivePeerDependencies:
+      - '@google-cloud/spanner'
+      - '@sap/hana-client'
+      - better-sqlite3
+      - hdb-pool
+      - ioredis
+      - mongodb
+      - mssql
+      - mysql2
+      - oracledb
+      - pg
+      - pg-native
+      - pg-query-stream
+      - redis
+      - sql.js
+      - sqlite3
+      - supports-color
+      - ts-node
+      - typeorm-aurora-data-api-driver
 
   typeorm@0.3.20:
     dependencies:
