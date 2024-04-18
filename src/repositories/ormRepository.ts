@@ -1,9 +1,13 @@
 import { Repository } from "typeorm";
 import { Challenger } from "./schemas/challenger";
-import { Challenge } from "./schemas/challenge";
 
 export class OrmRepository extends Repository<Challenger>{
-  async register(challenger: Challenge){
+
+  constructor(private datasource: any){
+    super(Challenger, datasource.createEntityManager());
+  }
+
+  async register(challenger: Partial<Challenger>){
     await this.save(challenger);
   }
 }

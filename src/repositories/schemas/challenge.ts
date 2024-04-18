@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Challenger } from './challenger';
 
@@ -8,11 +10,11 @@ enum regionSettings{
   as = "Asia",
 }
 
-interface Settings{
-  region: regionSettings;
-  onlySameRegion: boolean;
-  onlyRank: Number;
-}
+// interface Settings{
+//   region: regionSettings;
+//   onlySameRegion: boolean;
+//   onlyRank: Number;
+// }
 
 @Entity()
 export class Challenge{
@@ -22,12 +24,11 @@ export class Challenge{
   @CreateDateColumn({ name: 'createdAt' })
   createdAt: Date
 
-  @DeleteDateColumn({ name: 'createdAt' })
+  @DeleteDateColumn({ name: 'endedAt' })
   endedAt: Date
-  
 
-  @Column({ name: 'settings' })
-  settings: Settings
+  // @Column({ name: 'settings' })
+  // settings: Settings
 
   @OneToMany(() => Challenger, (challenger) => challenger.challengeIn)
   challengersOn: Challenger[];

@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Challenge } from "./challenge";
 
@@ -6,19 +8,19 @@ export class Challenger{
   @PrimaryGeneratedColumn("uuid")
   id: string
 
-  @Column({ name: 'nick', nullable: false })
+  @Column(() => String)
   nick: string
 
-  @Column({ name: 'email', nullable: false })
+  @Column(() => String)
   email: string
 
-  @CreateDateColumn({ name: 'createdAt' })
+  @CreateDateColumn()
   createdAt: Date
 
-  @Column({ name: 'avatarUrl', nullable: false })
+  @Column(() => String)
   avatarUrl: string
 
-  @Column({ name: 'rank' })
+  @Column(() => Number)
   rank: Number
 
   @ManyToOne(() => Challenge, (challenge) => challenge.challengersOn)
