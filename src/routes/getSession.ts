@@ -12,9 +12,7 @@ const ReqParser = z.object({
 })
 
 interface Session{
-  refresh: {
-    access_token: string;
-  }
+  refreshToken: string;
 }
 
 type ReqType = z.infer<typeof ReqParser>
@@ -33,7 +31,7 @@ export async function getSession(app: FastifyInstance){
 
       if(!session || !code) res.status(401).send({ msg: 'Unauthorized!' })
 
-      sessionId = session.refresh.access_token;
+      sessionId = session.refreshToken;
       res.setCookie('sessionId', sessionId, {
         path: '/',
         httpOnly: true,
@@ -41,7 +39,7 @@ export async function getSession(app: FastifyInstance){
         maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
       })
       
-      res.send({ session })
+      res.send(session)
     } else{
       const userInfo: any = await getDiscordSession.getBySessionId(res.unsignCookie(sessionId).value)
       res.send(userInfo)

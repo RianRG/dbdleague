@@ -36,11 +36,10 @@ export class GetDiscordSession{
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       })
-  
+      userInfo.data.avatar = `https://cdn.discordapp.com/avatars/${userInfo.data.id}/${userInfo.data.avatar}.png`
       return {
         user: userInfo.data,
-        output: output.data,
-        refresh: refresh.data
+        refreshToken: refresh.data.access_token,
       }
     } catch(err){
       return null;
@@ -53,9 +52,9 @@ export class GetDiscordSession{
         'Authorization': `Bearer ${sessionId}`
       }
     })
-
+    userInfo.data.avatar = `https://cdn.discordapp.com/avatars/${userInfo.data.id}/${userInfo.data.avatar}.png`
     return {
-      user: userInfo.data
+      user: userInfo.data,
     }
   }
 }
