@@ -2,31 +2,38 @@ import { FastifyInstance } from "fastify";
 import z from 'zod';
 import { GetDiscordSession } from "../services/get-discord-session";
 
-const ReqQueryParser = z.object({
+const ReqParser = z.object({
   query: z.object({
-    code: z.string()
+    code: z.string().optional()
   }),
   cookies: z.object({
       sessionId: z.string().optional()
   }).optional()
 })
 
-type ReqQueryType = z.infer<typeof ReqQueryParser>
+interface Session{
+  refresh: {
+    access_token: string;
+  }
+}
+
+type ReqType = z.infer<typeof ReqParser>
 
 export async function getSession(app: FastifyInstance){
-  app.get('/session', async (req: ReqQueryType, res) =>{
+  app.get('/session', async (req: ReqType, res) =>{
     
     const getDiscordSession = new GetDiscordSession();
 
-    const parsedReq = ReqQueryParser.parse(req);
+    const parsedReq = ReqParser.parse(req);
     const { code } = parsedReq.query
     let { sessionId } = parsedReq.cookies
     
     if(!sessionId || sessionId==='undefined'){
-      const session: any = await getDiscordSession.get(code);
+      const session: Session = await getDiscordSession.get(code);
 
-      if(session == -1) res.redirect('http://localhost:5000/auth/discord')
-      sessionId = session?.refresh?.access_token;
+      if(!session || !code) res.status(401).send({ msg: 'Unauthorized!' })
+
+      sessionId = session.refresh.access_token;
       res.setCookie('sessionId', sessionId, {
         path: '/',
         httpOnly: true,
@@ -37,7 +44,6 @@ export async function getSession(app: FastifyInstance){
       res.send({ session })
     } else{
       const userInfo: any = await getDiscordSession.getBySessionId(res.unsignCookie(sessionId).value)
-
       res.send(userInfo)
     }
     

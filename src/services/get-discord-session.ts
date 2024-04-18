@@ -43,7 +43,7 @@ export class GetDiscordSession{
         refresh: refresh.data
       }
     } catch(err){
-      return -1;
+      return null;
     }
   }
 
