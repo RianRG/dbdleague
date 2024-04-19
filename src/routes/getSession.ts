@@ -5,6 +5,7 @@ import { dataSource } from "../lib/typeorm/config";
 import { Challenger } from "../repositories/schemas/challenger";
 import { CreateChallenger } from "../services/create-challenger";
 import { OrmRepository } from "../repositories/ormRepository";
+import { FindChallengerByEmail } from "../services/find-challenger";
 
 const ReqParser = z.object({
   query: z.object({
@@ -56,12 +57,18 @@ type ReqType = z.infer<typeof ReqParser>
 export async function getSession(app: FastifyInstance){
   app.get('/session', async (req: ReqType, res) =>{
     const getDiscordSession = new GetDiscordSession();
-    
+    // datas.forEach(async (k) =>{
+    //   await dataSource.getRepository(Challenger).delete(k.id)
+    // })
+
     const parsedReq = ReqParser.parse(req);
     const { code } = parsedReq.query
     let { sessionId } = parsedReq.cookies
-    
+    const datas = await dataSource.getRepository(Challenger).find();
+    console.log(datas);
     if(!sessionId || sessionId==='undefined'){
+      const ormRepository = new OrmRepository(dataSource);
+
       const session: Session = await getDiscordSession.get(code);
       
       if(!session || !code) res.status(401).send({ msg: 'Unauthorized!' })
@@ -74,20 +81,20 @@ export async function getSession(app: FastifyInstance){
           maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
         })
         
-        const challenger = {
-          nick: session.user.global_name,
-          email: session.user.email,
-          avatarUrl: session.user.avatar,
-          rank: 0
+        const findChallengerByEmail = new FindChallengerByEmail(ormRepository);
+        const challengerExists = await findChallengerByEmail.execute(session.user.email)
+        
+        if(!challengerExists){
+          const challenger = {
+            nick: session.user.global_name,
+            email: session.user.email,
+            avatarUrl: session.user.avatar,
+            rank: 0
+          }
+  
+          const createChallenger = new CreateChallenger(ormRepository)
+          createChallenger.execute(challenger);
         }
-
-        const ormRepository = new OrmRepository(dataSource);
-        const createChallenger = new CreateChallenger(ormRepository)
-
-        createChallenger.execute(challenger);
-
-        const datas = await dataSource.getRepository(Challenger).find();
-        console.log(datas);
 
         res.send(session)
     } else{

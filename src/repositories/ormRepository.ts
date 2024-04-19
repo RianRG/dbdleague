@@ -10,4 +10,10 @@ export class OrmRepository extends Repository<Challenger>{
   async register(challenger: Partial<Challenger>){
     await this.save(challenger);
   }
+
+  async findChallengerByEmail(email: string){
+    return await this.findOneBy({
+      email
+    })
+  }
 }
