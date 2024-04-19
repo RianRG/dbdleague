@@ -3,6 +3,8 @@ import z from 'zod';
 import { GetDiscordSession } from "../services/get-discord-session";
 import { dataSource } from "../lib/typeorm/config";
 import { Challenger } from "../repositories/schemas/challenger";
+import { CreateChallenger } from "../services/create-challenger";
+import { OrmRepository } from "../repositories/ormRepository";
 
 const ReqParser = z.object({
   query: z.object({
@@ -72,16 +74,21 @@ export async function getSession(app: FastifyInstance){
           maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
         })
         
-        const challenger = dataSource.getRepository(Challenger).create({
+        const challenger = {
           nick: session.user.global_name,
           email: session.user.email,
           avatarUrl: session.user.avatar,
           rank: 0
-        })
-        await dataSource.getRepository(Challenger).save(challenger)
+        }
+
+        const ormRepository = new OrmRepository(dataSource);
+        const createChallenger = new CreateChallenger(ormRepository)
+
+        createChallenger.execute(challenger);
 
         const datas = await dataSource.getRepository(Challenger).find();
         console.log(datas);
+
         res.send(session)
     } else{
       const userInfo: any = await getDiscordSession.getBySessionId(res.unsignCookie(sessionId).value)

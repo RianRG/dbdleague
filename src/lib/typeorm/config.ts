@@ -8,8 +8,7 @@ const dataSource = new DataSource({
   password: 'docker',
   database: 'mypostgres',
   entities: ['src/repositories/schemas/*.ts'],
-  synchronize: true,
-  logging: true
+  synchronize: true
 })
 
 export { dataSource };
