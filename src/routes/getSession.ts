@@ -5,6 +5,7 @@ import { dataSource } from "../lib/typeorm/config";
 import { CreateChallenger } from "../services/create-challenger";
 import { ChallengerRepository } from "../repositories/challengerRepository";
 import { FindChallengerByEmail } from "../services/find-challenger";
+import { Challenger } from "../repositories/schemas/challenger";
 
 const ReqParser = z.object({
   query: z.object({
@@ -57,6 +58,12 @@ export async function getSession(app: FastifyInstance){
   app.get('/session', async (req: ReqType, res) =>{
     const getDiscordSession = new GetDiscordSession();
 
+    const datas = await dataSource.getRepository(Challenger).find();
+    console.log(datas);
+    // datas.forEach(async (k) =>{
+    //   await dataSource.getRepository(Challenger).delete(k.id)
+    // })
+
     const parsedReq = ReqParser.parse(req);
     const { code } = parsedReq.query
     let { sessionId } = parsedReq.cookies
@@ -79,7 +86,7 @@ export async function getSession(app: FastifyInstance){
       signed: true,
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
     })
-    
+
     const findChallengerByEmail = new FindChallengerByEmail(challengerRepository);
     const challengerExists = await findChallengerByEmail.execute(session.user.email)
       
@@ -88,7 +95,8 @@ export async function getSession(app: FastifyInstance){
         nick: session.user.global_name,
         email: session.user.email,
         avatarUrl: session.user.avatar,
-        rank: 0
+        rank: 0,
+        sessionId
       }
 
       const createChallenger = new CreateChallenger(challengerRepository)

@@ -21,6 +21,9 @@ export class Challenger{
   @Column('integer', { nullable: true })
   rank: Number
 
+  @Column('varchar', { length: 200, nullable: true })
+  sessionId: string
+
   @ManyToOne(() => Challenge, (challenge) => challenge.challengersOn)
   @JoinColumn({ name: 'challengeId' })
   challengeIn: Challenge;

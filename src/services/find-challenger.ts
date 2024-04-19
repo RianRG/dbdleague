@@ -1,10 +1,10 @@
-import { OrmRepository } from "../repositories/challengerRepository";
+import { ChallengerRepository } from "../repositories/challengerRepository";
 import { Challenger } from "../repositories/schemas/challenger";
 
 export class FindChallengerByEmail{
-  constructor(private ormRepository: OrmRepository){};
+  constructor(private challengerRepository: ChallengerRepository){};
 
   execute(email: string){
-    return this.ormRepository.findChallengerByEmail(email);
+    return this.challengerRepository.findChallengerByEmail(email);
   }
 }
