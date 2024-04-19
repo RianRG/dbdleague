@@ -3,22 +3,22 @@ type Message = { challengeId: string, challengersOn: number }
 type Subscriber = (msg: Message) => void;
 
 class PubSub{
-  private channels!: Subscriber[]
+  private channels: Record<string, Subscriber[]> = {};
 
-  publish(msg: Message){
-    if(!this.channels[msg.challengeId])
+  publish(challengeId: string, msg: Message){
+    if(!this.channels[challengeId])
       return;
 
-    this.channels[msg.challengeId].push(msg);
-  }
-
-  subscribe(msg: Message){
-    if(!this.channels[msg.challengeId])
-      this.channels[msg.challengeId] = [];
-
-    for(const sub of this.channels[msg.challengeId]){
+    for(const sub of this.channels[challengeId]){
       sub(msg);
     }
+  }
+
+  subscribe(challengeId: string, sub: Subscriber){
+    if(!this.channels[challengeId])
+      this.channels[challengeId] = [];
+
+    this.channels[challengeId].push(sub);
   }
 
 }

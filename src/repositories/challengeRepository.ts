@@ -7,6 +7,14 @@ export class ChallengeRepository extends Repository<Challenge>{
   }
 
   async register(challenge: Partial<Challenge>){
-    await this.save(challenge);
+    return await this.save(challenge);
+  }
+
+  async getChallenge(){
+    return await this.find({
+      relations: {
+        challengersOn: true
+      }
+    })
   }
 }

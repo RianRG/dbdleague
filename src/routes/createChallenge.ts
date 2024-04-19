@@ -8,6 +8,7 @@ import { ChallengerRepository } from "../repositories/challengerRepository";
 import { FindChallengerByEmail } from "../services/find-challenger";
 import { Challenger } from "../repositories/schemas/challenger";
 import { UpdateChallenger } from "../services/update-challenger";
+import { pubSub } from "../utils/pubSub";
 
 const ReqParser = z.object({
   body: z.object({
@@ -54,10 +55,12 @@ export async function createChallengeRoute(app: FastifyInstance){
       throw new Error('This user doesnt exist')
 
 
-    const challenge = await createChallenge.execute({
+    const challenge: any = await createChallenge.execute({
       owner: challenger.nick,
       challengersOn: [challenger]
     })
+
+    console.log(`chall:::: ${challenge}, ${challenge.id}`);
     const updatedChallenger = {
       ...challenger,
       challengeIn: challenge
@@ -66,5 +69,10 @@ export async function createChallengeRoute(app: FastifyInstance){
     const updateChallenger = new UpdateChallenger(challengerRepository);
 
     await updateChallenger.execute(challenger, updatedChallenger)
+
+    // pubSub.publish(challenge.id, {
+    //   challengeId: challenge.id,
+    //   challengersOn: 1
+    // })
   })
 }

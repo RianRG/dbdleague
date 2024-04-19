@@ -6,6 +6,7 @@ import { CreateChallenger } from "../services/create-challenger";
 import { ChallengerRepository } from "../repositories/challengerRepository";
 import { FindChallengerByEmail } from "../services/find-challenger";
 import { Challenger } from "../repositories/schemas/challenger";
+import { pubSub } from "../utils/pubSub";
 
 const ReqParser = z.object({
   query: z.object({
@@ -57,9 +58,13 @@ type ReqType = z.infer<typeof ReqParser>
 export async function getSession(app: FastifyInstance){
   app.get('/session', async (req: ReqType, res) =>{
     const getDiscordSession = new GetDiscordSession();
+    const datas = await dataSource.getRepository(Challenger).find()
+
     // datas.forEach(async (k) =>{
     //   await dataSource.getRepository(Challenger).delete(k.id)
     // })
+    
+    console.log(datas);
 
     const parsedReq = ReqParser.parse(req);
     const { code } = parsedReq.query
