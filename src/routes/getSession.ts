@@ -2,9 +2,8 @@ import { FastifyInstance } from "fastify";
 import z from 'zod';
 import { GetDiscordSession } from "../services/get-discord-session";
 import { dataSource } from "../lib/typeorm/config";
-import { Challenger } from "../repositories/schemas/challenger";
 import { CreateChallenger } from "../services/create-challenger";
-import { OrmRepository } from "../repositories/ormRepository";
+import { ChallengerRepository } from "../repositories/challengerRepository";
 import { FindChallengerByEmail } from "../services/find-challenger";
 
 const ReqParser = z.object({
@@ -63,11 +62,11 @@ export async function getSession(app: FastifyInstance){
     let { sessionId } = parsedReq.cookies
     
     if(sessionId && sessionId!=='undefined'){
-      const userInfo: any = await getDiscordSession.getBySessionId(res.unsignCookie(sessionId).value)
+      const userInfo: Session = await getDiscordSession.getBySessionId(res.unsignCookie(sessionId).value)
       res.send(userInfo)
     }
 
-    const ormRepository = new OrmRepository(dataSource);
+    const challengerRepository = new ChallengerRepository(dataSource);
 
     const session: Session = await getDiscordSession.get(code);
     
@@ -81,7 +80,7 @@ export async function getSession(app: FastifyInstance){
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
     })
     
-    const findChallengerByEmail = new FindChallengerByEmail(ormRepository);
+    const findChallengerByEmail = new FindChallengerByEmail(challengerRepository);
     const challengerExists = await findChallengerByEmail.execute(session.user.email)
       
     if(!challengerExists){
@@ -92,7 +91,7 @@ export async function getSession(app: FastifyInstance){
         rank: 0
       }
 
-      const createChallenger = new CreateChallenger(ormRepository)
+      const createChallenger = new CreateChallenger(challengerRepository)
       createChallenger.execute(challenger);
     }
     

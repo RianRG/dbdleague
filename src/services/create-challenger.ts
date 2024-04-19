@@ -1,4 +1,4 @@
-import { OrmRepository } from "../repositories/ormRepository";
+import { OrmRepository } from "../repositories/challengerRepository";
 import { Challenger } from "../repositories/schemas/challenger";
 
 export class CreateChallenger{

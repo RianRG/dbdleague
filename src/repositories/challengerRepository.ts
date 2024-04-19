@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { Challenger } from "./schemas/challenger";
 
-export class OrmRepository extends Repository<Challenger>{
+export class ChallengerRepository extends Repository<Challenger>{
 
   constructor(private datasource: any){
     super(Challenger, datasource.createEntityManager());

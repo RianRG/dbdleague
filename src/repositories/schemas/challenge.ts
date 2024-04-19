@@ -10,11 +10,11 @@ enum regionSettings{
   as = "Asia",
 }
 
-// interface Settings{
-//   region: regionSettings;
-//   onlySameRegion: boolean;
-//   onlyRank: Number;
-// }
+interface Settings{
+  region: regionSettings;
+  onlySameRegion: boolean;
+  onlyRank: Number;
+}
 
 @Entity()
 export class Challenge{
@@ -40,4 +40,7 @@ export class Challenge{
   @ManyToOne(() => Challenger, (challenger) => challenger.challengeIn)
   @JoinColumn({ name: 'looserId' })
   looser: Challenger;
+
+  @Column('varchar', { nullable: true })
+  owner: string
 }
