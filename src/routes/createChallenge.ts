@@ -7,6 +7,7 @@ import { Challenge } from "../repositories/schemas/challenge";
 import { ChallengerRepository } from "../repositories/challengerRepository";
 import { FindChallengerByEmail } from "../services/find-challenger";
 import { Challenger } from "../repositories/schemas/challenger";
+import { UpdateChallenger } from "../services/update-challenger";
 
 const ReqParser = z.object({
   body: z.object({
@@ -28,11 +29,15 @@ dataSource
 export async function createChallengeRoute(app: FastifyInstance){
   app.post('/challenge', async (req: ReqType, res) =>{
     const parsedReq = ReqParser.parse(req);
-    const datas = await dataSource.getRepository(Challenge).find();
+    const datas = await dataSource.getRepository(Challenge).find({
+      relations: {
+        challengersOn: true
+      }
+    });
     // datas.forEach(async (k) =>{
     //   await dataSource.getRepository(Challenge).delete(k.id)
     // })
-    
+    console.log(datas);
     const { email } = parsedReq.body
 
     const challengeRepository = new ChallengeRepository(dataSource);
@@ -48,13 +53,18 @@ export async function createChallengeRoute(app: FastifyInstance){
     if(!challenger)
       throw new Error('This user doesnt exist')
 
-    // console.log(challenger);
 
-    // const challenge = await createChallenge.execute({
-    //   owner: challenger.nick,
-    //   challengersOn: [challenger]
-    // })
-    
-    console.log(datas[0].challengersOn);
+    const challenge = await createChallenge.execute({
+      owner: challenger.nick,
+      challengersOn: [challenger]
+    })
+    const updatedChallenger = {
+      ...challenger,
+      challengeIn: challenge
+    }
+
+    const updateChallenger = new UpdateChallenger(challengerRepository);
+
+    await updateChallenger.execute(challenger, updatedChallenger)
   })
 }

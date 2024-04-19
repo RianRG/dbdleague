@@ -16,4 +16,10 @@ export class ChallengerRepository extends Repository<Challenger>{
       email
     })
   }
+
+  async updateChallengeIn(challenger: Challenger, updatedChallenger: Partial<Challenger>){
+    await this.merge(challenger, updatedChallenger)
+
+    return await this.save(challenger);
+  }
 }

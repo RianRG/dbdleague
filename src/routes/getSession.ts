@@ -57,9 +57,6 @@ type ReqType = z.infer<typeof ReqParser>
 export async function getSession(app: FastifyInstance){
   app.get('/session', async (req: ReqType, res) =>{
     const getDiscordSession = new GetDiscordSession();
-
-    const datas = await dataSource.getRepository(Challenger).find();
-    console.log(datas);
     // datas.forEach(async (k) =>{
     //   await dataSource.getRepository(Challenger).delete(k.id)
     // })
