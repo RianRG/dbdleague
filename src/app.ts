@@ -12,18 +12,6 @@ app.register(cookie, {
   hook: 'onRequest'
 })
 
-// app.register(plugin, {
-//   type: 'postgres',
-//   host: 'localhost',
-//   port: 5432,
-//   username: 'docker',
-//   password: 'docker',
-//   database: 'mypostgres',
-//   entities: ['/repositories/schemas/*.ts'],
-//   synchronize: true
-// }).ready()
-
-
 app.register(authDiscord)
 app.register(getSession)
 
