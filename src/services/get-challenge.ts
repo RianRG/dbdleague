@@ -2,10 +2,10 @@ import { Repository } from "typeorm";
 import { Challenge } from "../repositories/schemas/challenge";
 import { ChallengeRepository } from "../repositories/challengeRepository";
 
-export class GetChallenges{
+export class GetChallenge{
   constructor(private challengeRepository: ChallengeRepository){};
 
-  execute(){
-    return this.challengeRepository.getChallenges()
+  execute(id: string){
+    return this.challengeRepository.getChallengeById(id)
   }
 }

@@ -5,6 +5,9 @@ import { ChallengeRepository } from "../repositories/challengeRepository";
 import { UpdateChallenge } from "../services/update-challenge";
 import { FindChallenger } from "../services/find-challenger";
 import { ChallengerRepository } from "../repositories/challengerRepository";
+import { GetChallenge } from "../services/get-challenge";
+import { UpdateChallenger } from "../services/update-challenger";
+import { pubSub } from "../utils/pubSub";
 
 
 dataSource
@@ -17,28 +20,55 @@ dataSource
   })
 
 const reqParser = z.object({
-    challengeId: z.string(),
-    sessionId: z.string()
+    params: z.object({
+      challengeId: z.string()
+    }),
+    headers: z.object({
+      sessionid: z.string()
+    })
 })
 
 type ReqType = z.infer<typeof reqParser>
 export async function acceptChallengeRoute(app: FastifyInstance){
-  app.post('/challenge/accept/:challengeId', async (req, res) =>{
-    const { challengeId } = reqParser.parse(req.params)
-    const { sessionId } = reqParser.parse(req.cookies);
+  app.post('/challenge/accept/:challengeId', async (req: any, res) =>{
+    const { challengeId } = reqParser.parse(req).params
+    const sessionId = reqParser.parse(req).headers.sessionid
+    console.log(sessionId)
+    console.log(challengeId)
 
     if(!sessionId) throw new Error('Unauthorized!');
-
     const challengeRepository = new ChallengeRepository(dataSource)
     const challengerRepository = new ChallengerRepository(dataSource)
 
+    const updateChallenger = new UpdateChallenger(challengerRepository)
     const updateChallenge = new UpdateChallenge(challengeRepository);
     const findChallenger = new FindChallenger(challengerRepository);
+    const findChallenge = new GetChallenge(challengeRepository);
 
-    const challenger = findChallenger.findBySessionId(sessionId);
+    const challenger = await findChallenger.findByEmail(sessionId);
 
     if(!challenger) throw new Error('Unauthorized!');
 
-    
+    const challenge = await findChallenge.execute(challengeId);
+
+    const updatedChallenge = {
+      ...challenge,
+      challengersOn: [challenge.challengersOn[0], challenger]
+    }
+
+    const updatedChallenger = {
+      ...challenger,
+      challengeIn: challenge
+    }
+
+    await updateChallenge.execute(challenge, updatedChallenge);
+    await updateChallenger.execute(challenger, updatedChallenger);
+
+    pubSub.publish(challenge.id, {
+      challengersOn: 2,
+      createdAt: challenge.createdAt
+    })
+
+    res.status(201).send({ msg: 'challenge accepted!' });
   })
 }

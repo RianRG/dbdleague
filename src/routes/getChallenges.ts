@@ -4,7 +4,7 @@ import { z } from "zod";
 
 
 export async function getChallengesRoute(app: FastifyInstance){
-  app.get('/challenges', { websocket: true }, async (connection, req) =>{
+  app.get('/challenges/:challengeId', { websocket: true }, async (connection, req) =>{
 
     const reqParser = z.object({
       challengeId: z.string()
