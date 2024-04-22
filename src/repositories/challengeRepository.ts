@@ -20,4 +20,9 @@ export class ChallengeRepository extends Repository<Challenge>{
       }
     })
   }
+
+  async updateChallenge(challenge: Challenge, updatedChallenge: Challenge){
+    this.merge(challenge, updatedChallenge);
+    return await this.save(challenge)
+  }
 }

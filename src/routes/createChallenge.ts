@@ -5,7 +5,7 @@ import { ChallengeRepository } from "../repositories/challengeRepository";
 import { CreateChallenge } from "../services/create-challenge";
 import { Challenge } from "../repositories/schemas/challenge";
 import { ChallengerRepository } from "../repositories/challengerRepository";
-import { FindChallengerByEmail } from "../services/find-challenger";
+import { FindChallenger } from "../services/find-challenger";
 import { Challenger } from "../repositories/schemas/challenger";
 import { UpdateChallenger } from "../services/update-challenger";
 import { pubSub } from "../utils/pubSub";
@@ -47,9 +47,9 @@ export async function createChallengeRoute(app: FastifyInstance){
     )
 
     const challengerRepository = new ChallengerRepository(dataSource)
-    const findChallenger = new FindChallengerByEmail(challengerRepository)
+    const findChallenger = new FindChallenger(challengerRepository)
 
-    const challenger = await findChallenger.execute(email);
+    const challenger = await findChallenger.findByEmail(email);
 
     if(!challenger)
       throw new Error('This user doesnt exist')

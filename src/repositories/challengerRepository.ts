@@ -11,13 +11,21 @@ export class ChallengerRepository extends Repository<Challenger>{
     await this.save(challenger);
   }
 
-  async findChallengerByEmail(email: string){
+  async findByEmail(email: string){
     return await this.findOne({
       where: {
         email
       },
       relations: {
         challengeIn: true
+      }
+    })
+  }
+
+  async findBySessionId(sessionId: string){
+    return await this.findOne({
+      where: {
+        sessionId
       }
     })
   }

@@ -4,7 +4,7 @@ import { GetDiscordSession } from "../services/get-discord-session";
 import { dataSource } from "../lib/typeorm/config";
 import { CreateChallenger } from "../services/create-challenger";
 import { ChallengerRepository } from "../repositories/challengerRepository";
-import { FindChallengerByEmail } from "../services/find-challenger";
+import { FindChallenger } from "../services/find-challenger";
 import { Challenger } from "../repositories/schemas/challenger";
 import { pubSub } from "../utils/pubSub";
 
@@ -93,8 +93,8 @@ export async function getSession(app: FastifyInstance){
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
     })
 
-    const findChallengerByEmail = new FindChallengerByEmail(challengerRepository);
-    const challengerExists = await findChallengerByEmail.execute(session.user.email)
+    const findChallengerByEmail = new FindChallenger(challengerRepository);
+    const challengerExists = await findChallengerByEmail.findByEmail(session.user.email)
       
     if(!challengerExists){
       const challenger = {

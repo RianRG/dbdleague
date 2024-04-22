@@ -6,6 +6,7 @@ import { getSession } from './routes/getSession';
 import plugin from 'typeorm-fastify-plugin';
 import { createChallengeRoute } from './routes/createChallenge';
 import { getChallengesRoute } from './routes/getChallenges';
+import { acceptChallengeRoute } from './routes/acceptChallenge';
 const app = fastify();
 
 app.register(websocket);
@@ -18,5 +19,6 @@ app.register(authDiscord)
 app.register(getSession)
 app.register(createChallengeRoute)
 app.register(getChallengesRoute)
+app.register(acceptChallengeRoute)
 
 export { app };

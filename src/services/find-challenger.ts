@@ -1,10 +1,14 @@
 import { ChallengerRepository } from "../repositories/challengerRepository";
 import { Challenger } from "../repositories/schemas/challenger";
 
-export class FindChallengerByEmail{
+export class FindChallenger{
   constructor(private challengerRepository: ChallengerRepository){};
 
-  execute(email: string){
-    return this.challengerRepository.findChallengerByEmail(email);
+  findByEmail(email: string){
+    return this.challengerRepository.findByEmail(email);
+  }
+
+  findBySessionId(sessionId: string){
+    return this.challengerRepository.findBySessionId(sessionId);
   }
 }
