@@ -58,7 +58,11 @@ type ReqType = z.infer<typeof ReqParser>
 export async function getSession(app: FastifyInstance){
   app.get('/session', async (req: ReqType, res) =>{
     const getDiscordSession = new GetDiscordSession();
-    const datas = await dataSource.getRepository(Challenger).find()
+    const datas = await dataSource.getRepository(Challenger).find({
+      relations: {
+        challengeIn: true
+      }
+    })
 
     // datas.forEach(async (k) =>{
     //   await dataSource.getRepository(Challenger).delete(k.id)
@@ -99,7 +103,7 @@ export async function getSession(app: FastifyInstance){
         avatarUrl: session.user.avatar,
         rank: 0,
         sessionId
-      }
+      } 
 
       const createChallenger = new CreateChallenger(challengerRepository)
       createChallenger.execute(challenger);

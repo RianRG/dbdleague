@@ -14,6 +14,9 @@ export class ChallengeRepository extends Repository<Challenge>{
     return await this.find({
       relations: {
         challengersOn: true
+      },
+      order: {
+        createdAt: 'DESC'
       }
     })
   }

@@ -55,24 +55,26 @@ export async function createChallengeRoute(app: FastifyInstance){
       throw new Error('This user doesnt exist')
 
 
+    if(challenger.challengeIn) throw new Error('You cannot enter in 2 challenges at the same time!')
     const challenge: any = await createChallenge.execute({
       owner: challenger.nick,
       challengersOn: [challenger]
     })
 
-    console.log(`chall:::: ${challenge}, ${challenge.id}`);
+
     const updatedChallenger = {
       ...challenger,
       challengeIn: challenge
     }
-
     const updateChallenger = new UpdateChallenger(challengerRepository);
 
     await updateChallenger.execute(challenger, updatedChallenger)
 
-    // pubSub.publish(challenge.id, {
-    //   challengeId: challenge.id,
-    //   challengersOn: 1
-    // })
+    pubSub.publish(challenge.id, {
+      challengersOn: 1,
+      createdAt: challenge.createdAt
+    })
+
+    res.status(201).send(challenge)
   })
 }

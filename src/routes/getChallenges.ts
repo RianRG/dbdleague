@@ -1,29 +1,19 @@
 import { FastifyInstance } from "fastify";
-import { GetChallenges } from "../services/get-challenges";
-import { dataSource } from "../lib/typeorm/config";
-import { ChallengeRepository } from "../repositories/challengeRepository";
 import { pubSub } from "../utils/pubSub";
-dataSource
-  .initialize()
-  .then(() =>{
-    console.log('runnin datasource')
-  })
-  .catch(err =>{
-    console.log(err);
-  })
+import { z } from "zod";
 
 
 export async function getChallengesRoute(app: FastifyInstance){
   app.get('/challenges', { websocket: true }, async (connection, req) =>{
-    const challengeRepository = new ChallengeRepository(dataSource);
-    const getChallenges = new GetChallenges(challengeRepository);
 
-    const challenges = await getChallenges.execute();
+    const reqParser = z.object({
+      challengeId: z.string()
+    })
 
-    challenges.forEach(challenge =>{
-      pubSub.subscribe(challenge.id, msg =>{
-        connection.send(JSON.stringify(msg))
-      })
+    const { challengeId } = reqParser.parse(req.params);
+
+    pubSub.subscribe(challengeId, msg =>{
+      connection.send(JSON.stringify(msg))
     })
   })
 }
