@@ -65,9 +65,9 @@ export async function getSession(app: FastifyInstance){
       }
     })
 
-    datas.forEach(async (k) =>{
-      await dataSource.getRepository(Challenger).delete(k.id)
-    })
+    // datas.forEach(async (k) =>{
+    //   await dataSource.getRepository(Challenger).delete(k.id)
+    // })
     
     console.log(datas);
 

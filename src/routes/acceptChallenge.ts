@@ -57,6 +57,9 @@ export async function acceptChallengeRoute(app: FastifyInstance){
     if(settings.onlyRank[0] > challenger.rank || settings.onlyRank[1] < challenger.rank)
       return res.status(400).send({ msg: 'Your rank is not acceptable for this challenge!' })
 
+    if(settings.onlySameRegion==true && challenger.region !== settings.region)
+      return res.status(400).send({ msg: 'Your region is not acceptable for this challenge"' })
+
     const updatedChallenge = {
       ...challenge,
       challengersOn: [challenge.challengersOn[0], challenger]

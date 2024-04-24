@@ -14,6 +14,7 @@ const ReqParser = z.object({
   body: z.object({
     email: z.string(),
     settings: z.object({
+      region: z.string(),
       onlySameRegion: z.boolean(),
       onlyRank: z.array(z.number())
     })
