@@ -21,6 +21,9 @@ export class Challenger{
   @Column('integer', { nullable: false })
   rank: Number
 
+  @Column('varchar', { nullable: false })
+  region: string
+
   @Column('varchar', { length: 200, nullable: false })
   sessionId: string
 

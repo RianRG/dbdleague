@@ -6,7 +6,8 @@ import { CreateChallenger } from "../services/create-challenger";
 import { ChallengerRepository } from "../repositories/challengerRepository";
 import { FindChallenger } from "../services/find-challenger";
 import { Challenger } from "../repositories/schemas/challenger";
-import { pubSub } from "../utils/pubSub";
+import { GetContinentService } from "../services/get-respective-continent";
+
 
 const ReqParser = z.object({
   query: z.object({
@@ -64,9 +65,9 @@ export async function getSession(app: FastifyInstance){
       }
     })
 
-    // datas.forEach(async (k) =>{
-    //   await dataSource.getRepository(Challenger).delete(k.id)
-    // })
+    datas.forEach(async (k) =>{
+      await dataSource.getRepository(Challenger).delete(k.id)
+    })
     
     console.log(datas);
 
@@ -95,14 +96,19 @@ export async function getSession(app: FastifyInstance){
 
     const findChallengerByEmail = new FindChallenger(challengerRepository);
     const challengerExists = await findChallengerByEmail.findByEmail(session.user.email)
-      
+
     if(!challengerExists){
+      const country = session.user.locale.split('-')[1];
+      const getContinentService = new GetContinentService()
+
+      const region = await getContinentService.find(country)
       const challenger = {
         nick: session.user.global_name,
         email: session.user.email,
         avatarUrl: session.user.avatar,
         rank: 0,
-        sessionId
+        sessionId,
+        region
       } 
 
       const createChallenger = new CreateChallenger(challengerRepository)
