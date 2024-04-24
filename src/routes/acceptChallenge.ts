@@ -52,6 +52,8 @@ export async function acceptChallengeRoute(app: FastifyInstance){
 
     const challenge = await findChallenge.execute(challengeId);
 
+    const { settings } = challenge;
+
     const updatedChallenge = {
       ...challenge,
       challengersOn: [challenge.challengersOn[0], challenger]

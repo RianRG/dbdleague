@@ -6,7 +6,7 @@ import { Challenger } from './challenger';
 interface Settings{
   region?: String;
   onlySameRegion?: boolean;
-  onlyRank?: Number;
+  onlyRank?: Number[];
 }
 
 @Entity()
@@ -20,7 +20,7 @@ export class Challenge{
   @DeleteDateColumn({ name: 'endedAt' })
   endedAt: Date
 
-  @Column('json', { nullable: true })
+  @Column('json', { nullable: false })
   settings: Settings
 
   @OneToMany(() => Challenger, (challenger) => challenger.challengeIn)

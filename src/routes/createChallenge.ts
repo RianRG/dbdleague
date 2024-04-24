@@ -10,21 +10,14 @@ import { Challenger } from "../repositories/schemas/challenger";
 import { UpdateChallenger } from "../services/update-challenger";
 import { pubSub } from "../utils/pubSub";
 
-const Regions = {
-  "sa": "South America",
-  "na": "North America",
-  "eu": "Europe",
-  "as": "Asia"
-}
-
 const ReqParser = z.object({
   body: z.object({
     email: z.string(),
     settings: z.object({
       region: z.string(),
       onlySameRegion: z.boolean(),
-      onlyRank: z.number()
-    }).optional()
+      onlyRank: z.array(z.number())
+    })
   }),
 })
 
