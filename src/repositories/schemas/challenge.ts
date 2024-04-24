@@ -3,17 +3,10 @@ import 'reflect-metadata'
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Challenger } from './challenger';
 
-enum regionSettings{
-  sa = "South America",
-  na = "North America",
-  eu = "Europe",
-  as = "Asia",
-}
-
 interface Settings{
-  region: regionSettings;
-  onlySameRegion: boolean;
-  onlyRank: Number;
+  region?: String;
+  onlySameRegion?: boolean;
+  onlyRank?: Number;
 }
 
 @Entity()

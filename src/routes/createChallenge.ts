@@ -10,12 +10,19 @@ import { Challenger } from "../repositories/schemas/challenger";
 import { UpdateChallenger } from "../services/update-challenger";
 import { pubSub } from "../utils/pubSub";
 
+const Regions = {
+  "sa": "South America",
+  "na": "North America",
+  "eu": "Europe",
+  "as": "Asia"
+}
+
 const ReqParser = z.object({
   body: z.object({
     email: z.string(),
     settings: z.object({
-      region: z.enum(['sa', 'na', 'eu', 'as']),
-      sameRegion: z.boolean(),
+      region: z.string(),
+      onlySameRegion: z.boolean(),
       onlyRank: z.number()
     }).optional()
   }),
@@ -43,7 +50,7 @@ export async function createChallengeRoute(app: FastifyInstance){
     //   await dataSource.getRepository(Challenge).delete(k.id)
     // })
     console.log(datas);
-    const { email } = ReqParser.parse(req).body
+    const { email, settings } = ReqParser.parse(req).body
 
     const challengeRepository = new ChallengeRepository(dataSource);
     const createChallenge = new CreateChallenge(
@@ -62,7 +69,8 @@ export async function createChallengeRoute(app: FastifyInstance){
     if(challenger.challengeIn) throw new Error('You cannot enter in 2 challenges at the same time!')
     const challenge: any = await createChallenge.execute({
       owner: challenger.nick,
-      challengersOn: [challenger]
+      challengersOn: [challenger],
+      settings
     })
 
 
