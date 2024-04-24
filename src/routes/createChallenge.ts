@@ -12,7 +12,12 @@ import { pubSub } from "../utils/pubSub";
 
 const ReqParser = z.object({
   body: z.object({
-    email: z.string()
+    email: z.string(),
+    settings: z.object({
+      region: z.enum(['sa', 'na', 'eu', 'as']),
+      sameRegion: z.boolean(),
+      onlyRank: z.number()
+    }).optional()
   }),
 })
 
@@ -29,7 +34,6 @@ dataSource
 
 export async function createChallengeRoute(app: FastifyInstance){
   app.post('/challenge', async (req: ReqType, res) =>{
-    const parsedReq = ReqParser.parse(req);
     const datas = await dataSource.getRepository(Challenge).find({
       relations: {
         challengersOn: true
@@ -39,7 +43,7 @@ export async function createChallengeRoute(app: FastifyInstance){
     //   await dataSource.getRepository(Challenge).delete(k.id)
     // })
     console.log(datas);
-    const { email } = parsedReq.body
+    const { email } = ReqParser.parse(req).body
 
     const challengeRepository = new ChallengeRepository(dataSource);
     const createChallenge = new CreateChallenge(

@@ -23,20 +23,19 @@ const reqParser = z.object({
     params: z.object({
       challengeId: z.string()
     }),
-    headers: z.object({
-      sessionid: z.string()
+    body: z.object({
+      email: z.string()
     })
 })
 
 type ReqType = z.infer<typeof reqParser>
 export async function acceptChallengeRoute(app: FastifyInstance){
-  app.post('/challenge/accept/:challengeId', async (req: any, res) =>{
-    const { challengeId } = reqParser.parse(req).params
-    const sessionId = reqParser.parse(req).headers.sessionid
-    console.log(sessionId)
+  app.post('/challenge/accept/:challengeId', async (req: ReqType, res) =>{
+    const { challengeId } = reqParser.parse(req).params;
+    const { email } = reqParser.parse(req).body
     console.log(challengeId)
 
-    if(!sessionId) throw new Error('Unauthorized!');
+    if(!email) throw new Error('Unauthorized!');
     const challengeRepository = new ChallengeRepository(dataSource)
     const challengerRepository = new ChallengerRepository(dataSource)
 
@@ -45,9 +44,11 @@ export async function acceptChallengeRoute(app: FastifyInstance){
     const findChallenger = new FindChallenger(challengerRepository);
     const findChallenge = new GetChallenge(challengeRepository);
 
-    const challenger = await findChallenger.findByEmail(sessionId);
+    const challenger = await findChallenger.findByEmail(email);
 
     if(!challenger) throw new Error('Unauthorized!');
+
+    if(challenger.challengeIn) throw new Error('You cannot accept 2 challenges at the same time!')
 
     const challenge = await findChallenge.execute(challengeId);
 

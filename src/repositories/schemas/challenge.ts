@@ -27,8 +27,8 @@ export class Challenge{
   @DeleteDateColumn({ name: 'endedAt' })
   endedAt: Date
 
-  // @Column({ name: 'settings' })
-  // settings: Settings
+  @Column('json', { nullable: true })
+  settings: Settings
 
   @OneToMany(() => Challenger, (challenger) => challenger.challengeIn)
   challengersOn: Challenger[];
@@ -41,6 +41,6 @@ export class Challenge{
   @JoinColumn({ name: 'looserId' })
   looser: Challenger;
 
-  @Column('varchar', { nullable: true })
+  @Column('varchar', { nullable: false })
   owner: string
 }

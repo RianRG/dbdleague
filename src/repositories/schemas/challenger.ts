@@ -6,22 +6,22 @@ export class Challenger{
   @PrimaryGeneratedColumn("uuid")
   id: string
 
-  @Column('varchar', { length: 200, nullable: true })
+  @Column('varchar', { length: 200, nullable: false })
   nick: string
 
-  @Column('varchar', { length: 200, nullable: true })
+  @Column('varchar', { length: 200, nullable: false })
   email: string
 
   @CreateDateColumn()
   createdAt: Date
 
-  @Column('varchar', { length: 200, nullable: true })
+  @Column('varchar', { length: 200, nullable: false })
   avatarUrl: string
 
-  @Column('integer', { nullable: true })
+  @Column('integer', { nullable: false })
   rank: Number
 
-  @Column('varchar', { length: 200, nullable: true })
+  @Column('varchar', { length: 200, nullable: false })
   sessionId: string
 
   @ManyToOne(() => Challenge, (challenge) => challenge.challengersOn)
