@@ -33,7 +33,16 @@ Then, the user can create a challenge, accept a challenge, list all challenges, 
 
 ## How to use
 
+You need to download NodeJS and install PNPM
+
 Install the requirements running this command:
 ```
 pnpm install
 ```
+
+Then run the following command:
+```
+pnpm run dev
+```
+
+thank you
