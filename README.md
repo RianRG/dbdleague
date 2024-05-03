@@ -1,5 +1,5 @@
 # Dbd League Ladder System
-A backend project based on dbdleague's discord bot (for 1v1s). Its a project that allows the user to create challenges and accept challenges against other users. (Some checks during this process)
+A backend project based on dbdleague's discord bot (for 1v1s). It's a project that allows the user to create challenges and accept challenges against other users. (Some checks during this process)
 
 ## Excalidraw 
 
@@ -11,10 +11,10 @@ I'm using the discord authorization proccess on this application instead of basi
 
 It uses TypeORM for the queries and store all information on a postgres database (Containerized by a docker-compose)
 
-First the user makes login through the discord login protocol and we store his main infos on our database. (nick, email, avatarUrl, region)
-*We can get also the user's color to put on frontend and make different styles*
-*The region returned by discord api is not a continent, so we have to make a request to Restcountries API (restcountries.com) and save the user's continent on database*
-*We need to get the user's continent for the future challenge checks (A challenge can accept ONLY challengers of the same region)*
+First the user logs in through the discord login protocol and we store his main infos on our database. (nick, email, avatarUrl, region)
+* *We can also get the user's color to put on frontend and make different styles*
+* *The region returned by discord api is not a continent, so we have to make a request to Restcountries API (restcountries.com) and save the user's continent on database*
+* *We need to get the user's continent for the future challenge checks (A challenge can ONLY accept challengers from the same region)*
 
 Then, the user can create a challenge, accept a challenge, list all challenges, get dinamic infos about a challenge through a websocket protocol. (Pubsub design pattern)
 
