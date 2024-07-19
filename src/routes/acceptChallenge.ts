@@ -51,7 +51,7 @@ export async function acceptChallengeRoute(app: FastifyInstance){
     if(challenger.challengeIn) throw new Error('You cannot accept 2 challenges at the same time!')
 
     const challenge = await findChallenge.execute(challengeId);
-
+    console.log(`CHALLEN:::::: ${challenge}`)
     const { settings } = challenge;
 
     if(settings.onlyRank[0] > challenger.rank || settings.onlyRank[1] < challenger.rank)
