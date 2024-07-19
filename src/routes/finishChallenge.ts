@@ -53,7 +53,7 @@ export async function finishChallenge(app: FastifyInstance){
       winner: challenge[0].challengersOn[winner],
       looser: challenge[0].challengersOn[looser]
     }
-
+//oi
     console.log(updatedChallenge)
     await updateChallenge.execute(challenge[0], updatedChallenge)
 
