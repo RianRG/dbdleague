@@ -33,7 +33,6 @@ export async function acceptChallengeRoute(app: FastifyInstance){
   app.post('/challenge/accept/:challengeId', async (req: ReqType, res) =>{
     const { challengeId } = reqParser.parse(req).params;
     const { email } = reqParser.parse(req).body
-    console.log(challengeId)
 
     if(!email) throw new Error('Unauthorized!');
     const challengeRepository = new ChallengeRepository(dataSource)

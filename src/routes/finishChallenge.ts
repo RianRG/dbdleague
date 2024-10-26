@@ -47,7 +47,6 @@ export async function finishChallenge(app: FastifyInstance){
     const challengeRepository = new ChallengeRepository(dataSource);
     const updateChallenge = new UpdateChallenge(challengeRepository)
 
-    console.log(challenge[0])
     const updatedChallenge = {
       ...challenge[0],
       endedAt: new Date(),
@@ -55,7 +54,6 @@ export async function finishChallenge(app: FastifyInstance){
       looser: challenge[0].challengersOn[looser]
     }
 
-    console.log(updatedChallenge)
     await updateChallenge.execute(challenge[0], updatedChallenge)
     
     pubSub.publish(challenge[0].id, {

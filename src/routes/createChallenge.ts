@@ -42,7 +42,6 @@ export async function createChallengeRoute(app: FastifyInstance){
     // datas.forEach(async (k) =>{
     //   await dataSource.getRepository(Challenge).delete(k.id)
     // })
-    console.log(datas);
     const { email, settings } = ReqParser.parse(req).body
 
     const challengeRepository = new ChallengeRepository(dataSource);

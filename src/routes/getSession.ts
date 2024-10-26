@@ -69,7 +69,6 @@ export async function getSession(app: FastifyInstance){
     //   await dataSource.getRepository(Challenger).delete(k.id)
     // })
     
-    console.log(datas);
 
     const parsedReq = ReqParser.parse(req);
     const { code } = parsedReq.query
