@@ -1,4 +1,4 @@
-type Message = { challengersOn: number, createdAt: Date }
+type Message = { challengersOn: number, createdAt: Date, endedAt?: Date }
 
 type Subscriber = (msg: Message) => void;
 
@@ -9,6 +9,7 @@ class PubSub{
     if(!this.channels[challengeId])
       return;
     for(const sub of this.channels[challengeId]){
+      if(!msg.endedAt) msg.endedAt = null;
       sub(msg);
     }
   }

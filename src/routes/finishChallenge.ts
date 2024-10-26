@@ -4,6 +4,7 @@ import { dataSource } from "../lib/typeorm/config";
 import { Challenge } from "../repositories/schemas/challenge";
 import { ChallengeRepository } from "../repositories/challengeRepository";
 import { UpdateChallenge } from "../services/update-challenge";
+import { pubSub } from "../utils/pubSub";
 
 const ReqParser = z.object({
   params: z.object({
@@ -53,9 +54,15 @@ export async function finishChallenge(app: FastifyInstance){
       winner: challenge[0].challengersOn[winner],
       looser: challenge[0].challengersOn[looser]
     }
-//oi
+
     console.log(updatedChallenge)
     await updateChallenge.execute(challenge[0], updatedChallenge)
+    
+    pubSub.publish(challenge[0].id, {
+      challengersOn: 0,
+      createdAt: challenge[0].createdAt,
+      endedAt: updatedChallenge.endedAt
+    })
 
     return res.status(201).send({ msg: 'Challenge updated successfully!' })
   })

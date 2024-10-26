@@ -3,7 +3,7 @@ import { pubSub } from "../utils/pubSub";
 import { z } from "zod";
 
 
-export async function getChallengesRoute(app: FastifyInstance){
+export async function getChallengeRoute(app: FastifyInstance){
   app.get('/challenges/:challengeId', { websocket: true }, async (connection, req) =>{
 
     const reqParser = z.object({

@@ -5,7 +5,7 @@ import cookie from '@fastify/cookie'
 import { getSession } from './routes/getSession';
 import plugin from 'typeorm-fastify-plugin';
 import { createChallengeRoute } from './routes/createChallenge';
-import { getChallengesRoute } from './routes/getChallenges';
+import { getChallengeRoute } from './routes/getChallenge';
 import { acceptChallengeRoute } from './routes/acceptChallenge';
 import { finishChallenge } from './routes/finishChallenge';
 const app = fastify();
@@ -19,7 +19,7 @@ app.register(cookie, {
 app.register(authDiscord)
 app.register(getSession)
 app.register(createChallengeRoute)
-app.register(getChallengesRoute)
+app.register(getChallengeRoute)
 app.register(acceptChallengeRoute)
 app.register(finishChallenge)
 

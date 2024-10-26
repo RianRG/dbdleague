@@ -60,6 +60,7 @@ export async function createChallengeRoute(app: FastifyInstance){
 
 
     if(challenger.challengeIn) throw new Error('You cannot enter in 2 challenges at the same time!')
+      
     const challenge: any = await createChallenge.execute({
       owner: challenger.nick,
       challengersOn: [challenger],
