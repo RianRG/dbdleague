@@ -3,7 +3,7 @@ import { dataSource } from "../lib/typeorm/config";
 import { z } from "zod";
 import { ChallengeRepository } from "../repositories/challengeRepository";
 import { UpdateChallenge } from "../services/update-challenge";
-import { FindChallenger } from "../services/find-challenger";
+import { GetChallenger } from "../services/get-challenger";
 import { ChallengerRepository } from "../repositories/challengerRepository";
 import { GetChallenge } from "../services/get-challenge";
 import { UpdateChallenger } from "../services/update-challenger";
@@ -41,7 +41,7 @@ export async function acceptChallengeRoute(app: FastifyInstance){
 
     const updateChallenger = new UpdateChallenger(challengerRepository)
     const updateChallenge = new UpdateChallenge(challengeRepository);
-    const findChallenger = new FindChallenger(challengerRepository);
+    const findChallenger = new GetChallenger(challengerRepository);
     const findChallenge = new GetChallenge(challengeRepository);
 
     const challenger = await findChallenger.findByEmail(email);
@@ -51,6 +51,7 @@ export async function acceptChallengeRoute(app: FastifyInstance){
     if(challenger.challengeIn) throw new Error('You cannot accept 2 challenges at the same time!')
 
     const challenge = await findChallenge.execute(challengeId);
+    if(!challenge) throw new Error('Challenge not found!')
     const { settings } = challenge;
 
     if(settings.onlyRank[0] > challenger.rank || settings.onlyRank[1] < challenger.rank)

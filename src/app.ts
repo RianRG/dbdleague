@@ -8,6 +8,7 @@ import { createChallengeRoute } from './routes/createChallenge';
 import { getChallengeRoute } from './routes/getChallenge';
 import { acceptChallengeRoute } from './routes/acceptChallenge';
 import { finishChallenge } from './routes/finishChallenge';
+import { getChallengesRoute } from './routes/getChallenges';
 const app = fastify();
 
 app.register(websocket);
@@ -22,5 +23,6 @@ app.register(createChallengeRoute)
 app.register(getChallengeRoute)
 app.register(acceptChallengeRoute)
 app.register(finishChallenge)
+app.register(getChallengesRoute)
 
 export { app };

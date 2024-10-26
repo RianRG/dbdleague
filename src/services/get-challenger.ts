@@ -1,7 +1,7 @@
 import { ChallengerRepository } from "../repositories/challengerRepository";
 import { Challenger } from "../repositories/schemas/challenger";
 
-export class FindChallenger{
+export class GetChallenger{
   constructor(private challengerRepository: ChallengerRepository){};
 
   findByEmail(email: string){
